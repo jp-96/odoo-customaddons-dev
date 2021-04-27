@@ -1,0 +1,32 @@
+version: '2'
+services:
+  web:
+    image: junari/odoo
+    ports:
+      - "8069:8069"
+    volumes:
+      - ../.vscode:/opt/odoo/.vscode:cached
+      - ..:/opt/odoo/custom_addons:cached
+      - junari-odoo-data:/opt/odoo/data
+      - junari-odoo-home:/home/odoo
+    env_file:
+      - odoo.env
+    depends_on: 
+      - db
+    command: bash
+    tty: true
+
+  db:
+    image: postgres:11
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_PASSWORD=odoo
+      - POSTGRES_USER=odoo
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres11-data:/var/lib/postgresql/data
+volumes:
+  junari-odoo-data:
+  junari-odoo-home:
+  postgres11-data:
